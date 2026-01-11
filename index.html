@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather App</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #4b6cb7, #182848);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        transition: background 1s ease;
+      }
+
+      .card {
+        width: 420px;
+        padding: 35px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        text-align: center;
+      }
+
+      input {
+        width: 80%;
+        padding: 8px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 8px 15px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      #weather {
+        margin-top: 15px;
+        white-space: pre-line;
+        font-size: 18px;
+      }
+
+      .input-wrapper {
+        position: relative;
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      #city {
+        width: 100%;
+        padding: 8px 30px 8px 10px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+      }
+
+      #clearBtn {
+        position: absolute;
+        right: 10px;
+        top: 30%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        color: black;
+        user-select: none;
+        display: none;
+      }
+
+      #details {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>🌦Weather App</h2>
+      <div class="input-wrapper">
+        <input id="city" placeholder="Enter city name" />
+        <span id="clearBtn">&times;</span>
+        <br />
+      </div>
+      <button id="searchBtn">Search</button>
+      <p
+        id="cityName"
+        style="font-weight: bold; font-size: 20px; margin: 5px 0"
+      ></p>
+      <p id="icon" style="font-size: 40px; margin: 5px 0"></p>
+      <h1 id="temp" style="margin: 5px 0"></h1>
+      <p id="details"></p>
+      <p id="sun"></p>
+      <p id="timeZone"></p>
+      <p id="localTime"></p>
+    </div>
+
+    <script>
+      document
+        .getElementById("searchBtn")
+        .addEventListener("click", function () {
+          let city = document.getElementById("city").value;
+
+          if (city === "") {
+            alert("Please enter a city name");
+            return;
+          }
+
+          let apiKey = "a08c5188a1fbdec2e9216570aa2679cf";
+          let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+          fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.cod === "404") {
+                document.getElementById("cityName").innerText = "";
+                document.getElementById("temp").innerText = "";
+                document.getElementById("icon").innerText = "";
+                document.getElementById("details").innerText = "City not found";
+                document.getElementById("sun").innerText = "";
+                document.getElementById("timeZone").innerText = "";
+                document.getElementById("localTime").innerText = "";
+                return;
+              }
+              document.getElementById("cityName").innerText =
+                data.name + ", " + data.sys.country;
+              document.getElementById("temp").innerText = data.main.temp + "°C";
+              document.getElementById("details").innerText =
+                data.weather[0].description +
+                "\nTemperature: " +
+                data.main.temp +
+                "°C" +
+                "\nFeels like:" +
+                data.main.feels_like +
+                "°C" +
+                "\nHumidity: " +
+                data.main.humidity +
+                "%" +
+                "\nWind: " +
+                data.wind.speed +
+                " m/s";
+
+              let weatherMain = data.weather[0].main.toLowerCase();
+              let weatherDesc = data.weather[0].description.toLowerCase();
+
+              let localNow = data.dt + data.timezone;
+
+              let sunriseTime = data.sys.sunrise + data.timezone;
+              let sunsetTime = data.sys.sunset + data.timezone;
+
+              let isDay = localNow >= sunriseTime && localNow <= sunsetTime;
+
+              let emoji = "";
+
+              if (
+                weatherMain.includes("snow") ||
+                weatherDesc.includes("snow") ||
+                weatherDesc.includes("sleet") ||
+                weatherDesc.includes("blizzard")
+              ) {
+                emoji = "❄️";
+              } else if (weatherMain.includes("clear")) {
+                emoji = isDay ? "☀️" : "🌙";
+              } else if (weatherMain.includes("cloud")) {
+                emoji = isDay ? "☁️" : "🌥️";
+              } else if (
+                weatherMain.includes("rain") ||
+                weatherMain.includes("drizzle")
+              ) {
+                emoji = "🌧️";
+              } else if (weatherMain.includes("thunder")) {
+                emoji = "⛈️";
+              } else {
+                emoji = "🌈";
+              }
+
+              document.getElementById("icon").innerText = emoji;
+
+              let sunrise = new Date(data.sys.sunrise * 1000);
+              let sunset = new Date(data.sys.sunset * 1000);
+
+              document.getElementById("sun").innerText =
+                "🌅 Sunrise: " +
+                sunrise.toLocaleTimeString() +
+                "\n🌇 Sunset: " +
+                sunset.toLocaleTimeString();
+
+              let timezone = data.timezone;
+              let localTime = new Date(Date.now() + timezone * 1000);
+              document.getElementById("localTime").innerText =
+                "🕒 Local Time: " + localTime.toUTCString().slice(17, 25);
+
+              document.getElementById("timeZone").innerText =
+                "⏱ Timezone: UTC " + timezone / 3600;
+
+              let body = document.body;
+
+              if (!isDay) {
+                switch (true) {
+                  case weatherMain.includes("snow"):
+                    body.style.background =
+                      "linear-gradient(135deg, #6b7b8c, #9aaebe)";
+                    break;
+                  case weatherMain.includes("clear"):
+                    body.style.background =
+                      "linear-gradient(135deg, #0f2027, #203a43)";
+                    break;
+                  case weatherMain.includes("cloud"):
+                    body.style.background =
+                      "linear-gradient(135deg, #232526, #414345)";
+                    break;
+                  case weatherMain.includes("rain") ||
+                    weatherMain.includes("drizzle"):
+                    body.style.background =
+                      "linear-gradient(135deg, #141e30, #243b55)";
+                    break;
+                  case weatherMain.includes("thunder"):
+                    body.style.background =
+                      "linear-gradient(135deg, #0b0c2b, #343a50)";
+                    break;
+                  default:
+                    body.style.background =
+                      "linear-gradient(135deg, #1c1c2b, #50507a)";
+                }
+              } else {
+                
+                switch (true) {
+                  case weatherMain.includes("snow"):
+                    body.style.background =
+                      "linear-gradient(135deg, #E0EAFC, #CFDEF3)";
+                    break;
+                  case weatherMain.includes("clear"):
+                    body.style.background =
+                      "linear-gradient(135deg, #FFD700, #FF8C00)";
+                    break;
+                  case weatherMain.includes("cloud"):
+                    body.style.background =
+                      "linear-gradient(135deg, #6A85B6, #BAC8E0)";
+                    break;
+                  case weatherMain.includes("rain") ||
+                    weatherMain.includes("drizzle"):
+                    body.style.background =
+                      "linear-gradient(135deg, #1F1C2C, #928DAB)";
+                    break;
+                  case weatherMain.includes("thunder"):
+                    body.style.background =
+                      "linear-gradient(135deg, #FF6B6B, #FF8C42)";
+                    break;
+                  default:
+                    body.style.background =
+                      "linear-gradient(135deg, #8E2DE2, #4A00E0)";
+                }
+              }
+            })
+
+            .catch((error) => {
+              alert("City not found");
+            });
+        });
+      document
+        .getElementById("city")
+        .addEventListener("keyup", function (event) {
+          if (event.key === "Enter") {
+            document.getElementById("searchBtn").click();
+          }
+        });
+      const cityInput = document.getElementById("city");
+      const clearBtn = document.getElementById("clearBtn");
+
+      cityInput.addEventListener("input", () => {
+        clearBtn.style.display = cityInput.value ? "block" : "none";
+      });
+
+      clearBtn.addEventListener("click", () => {
+        cityInput.value = "";
+        clearBtn.style.display = "none";
+        cityInput.focus();
+        document.getElementById("cityName").innerText = "";
+        document.getElementById("temp").innerText = "";
+        document.getElementById("icon").innerText = "";
+        document.getElementById("details").innerText = "";
+        document.getElementById("sun").innerText = "";
+        document.getElementById("timeZone").innerText = "";
+        document.getElementById("localTime").innerText = "";
+      });
+    </script>
+  </body>
+</html>
