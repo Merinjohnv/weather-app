@@ -1,8 +1,10 @@
-🌦 Weather App
+## 🌦 Weather App
 
 A simple weather application that allows users to search for any city and view real-time weather information.
 
-✨ Features :
+---
+
+## ✨ Features :
 
 🔎 Search weather by city name
 
@@ -22,7 +24,9 @@ A simple weather application that allows users to search for any city and view r
 
 ⚠️ Error handling for invalid city names
 
-🎨 UI Highlights :
+---
+
+## 🎨 UI Highlights :
 
 Clean minimal interface
 
@@ -30,7 +34,9 @@ Search box with clear (×) icon
 
 Background changes according to weather
 
-🛠️ Technologies Used :
+---
+
+## 🛠️ Technologies Used :
 
 HTML
 
@@ -40,7 +46,9 @@ JavaScript
 
 OpenWeather API
 
-📌 How to Use :
+---
+
+## 📌 How to Use :
 
 Type the city name in the search box
 
@@ -48,7 +56,15 @@ Click Search or press Enter
 
 Weather details will appear below
 
-🚀 Future Improvements (Coming Soon) :
+---
+
+## 🚀 Live Demo
+
+👉 https://merinjohnv.github.io/weather-app/
+
+---
+
+## 🚀 Future Improvements (Coming Soon) :
 
 ❄ Snow detection + snow animation
 
