@@ -20,7 +20,7 @@ A simple weather application that allows users to search for any city and view r
 
 - Local time based on timezone
 
-- Sunrise & 🌇 sunset time
+- Sunrise & sunset time
 
 - Error handling for invalid city names
 
