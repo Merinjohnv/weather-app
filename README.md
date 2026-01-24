@@ -1,32 +1,32 @@
-## 🌦 Weather App
+##  Weather App
 
 A simple weather application that allows users to search for any city and view real-time weather information.
 
 ---
 
-## ✨ Features :
+##  Features :
 
-🔎 Search weather by city name
+- Search weather by city name
 
-🌡️ Current temperature
+- Current temperature
 
-🤒 “Feels like” temperature
+- “Feels like” temperature
 
-☁️ Weather condition (clear, clouds, rain, etc.)
+- Weather condition (clear, clouds, rain, etc.)
 
-💧 Humidity percentage
+- Humidity percentage
 
-🌬️ Wind speed
+- Wind speed
 
-🕒 Local time based on timezone
+- Local time based on timezone
 
-🌅 Sunrise & 🌇 sunset time
+- Sunrise & 🌇 sunset time
 
-⚠️ Error handling for invalid city names
+- Error handling for invalid city names
 
 ---
 
-## 🎨 UI Highlights :
+##  UI Highlights :
 
 Clean minimal interface
 
@@ -36,7 +36,7 @@ Background changes according to weather
 
 ---
 
-## 🛠️ Technologies Used :
+##  Technologies Used :
 
 HTML
 
@@ -48,7 +48,7 @@ OpenWeather API
 
 ---
 
-## 📌 How to Use :
+##  How to Use :
 
 Type the city name in the search box
 
@@ -58,18 +58,7 @@ Weather details will appear below
 
 ---
 
-## 🚀 Live Demo
+##  Live Demo
 
-👉 https://merinjohnv.github.io/weather-app/
+ https://merinjohnv.github.io/weather-app/
 
----
-
-## 🚀 Future Improvements (Coming Soon) :
-
-❄ Snow detection + snow animation
-
-🌍 Detect user current location automatically
-
-📱 Make app fully responsive
-
-📊 5-day weather forecast
